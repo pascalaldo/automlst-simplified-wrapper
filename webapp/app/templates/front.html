@@ -1,0 +1,44 @@
+{% extends "main.html" %}
+{% block mainbody %}
+    <!-- /container -->
+<div class="jumbotron frontjt"> <!-- background image missing -->
+        <div class="darkbarbg" style="padding-bottom:20px"> <!-- quick fix to bottom padding -->
+            <div class="container">
+                <h1 class="h2alike">Automatic Multi-Locus Species Tree</h1>
+                    <p>Upload sequence(s) for automatic generation of species phylogeny with reference organisms</p>
+                <center><a href="/analyze" class="btn btn-primary" role="button">Start query &raquo;</a> <a href="#" class="btn btn-primary" role="button">View example &raquo;</a></center>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Overview</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Rapid ANI estimation</h3>
+                <img src="../static/images/mashnetwork.jpg" alt="Netork depicting ani distances" width="300" class="img-responsive frontimgs">
+                <p>Nearest reference organisms (NCBI RefSeq) are identified and collated</p>
+            </div>
+            <div class="col-md-4">
+                <h3>MLST gene selection</h3>
+                <img src="../static/images/mlstselect.jpg" alt="Selection of mlst genes" width="300" class="img-responsive frontimgs">
+                <p>Single copy genes with dN/dS values < 1 are identified and prioritized</p>
+            </div>
+            <div class="col-md-4">
+                <h3>Tree building</h3>
+                <img src="../static/images/stropicatree.jpg" alt="Example tree output" width="300" class="img-responsive frontimgs">
+                <p>Phylogeny is built using all MLST genes from query and reference organisms using either a concatenated gene or coalescent tree method.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <a href="#" class="btn btn-default" role="button">View details &raquo;</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <!-- footer images aren't there -->
+        <img src="../static/images/unituebingen.png" height="30">
+        <img src="../static/images/dzif.png" height="30">
+    </footer>
+{% endblock %}

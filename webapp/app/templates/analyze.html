@@ -1,0 +1,168 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<div class="serverstats">
+        <ul class="list-inline">
+            <li class="statuslabel">Server Status &raquo;</li>
+            <li>Running: <span id="server-running">n/a</span></li>
+            <li>Queue: <span id="server-queue">n/a</span></li>
+            <li>Done: <span id="server-done">n/a</span></li>
+        </ul>
+</div>
+<div class="container" style="padding-top:25px;">
+    <ul class="nav nav-tabs">
+        <li class="active" id="fasttab"><a data-toggle="tab" href="#workflow2" onclick="$('#workflow').val('2');toggledesc('2')">Placement mode</a> </li> <!-- active class is lost after scrolling -->
+        <li id="mtab"><a data-toggle="tab" href="#workflow1" onclick="$('#workflow').val('1');toggledesc('1')">Basic mode</a> </li>
+    </ul>
+    <form action="startjob" method="post" enctype="multipart/form-data" name="sequpload" id="sequpload">
+        <div id="wf2desc">
+            <h5><b>Placement Mode</b>: Automatically add your sequences to  reference gene trees and compute coalescent species tree (fastest)</h5>
+        </div>
+        <div id="wf1desc" class="hidden">
+            <h5><b>Basic Mode</b>: Automatically find related sequences and build alignments and species tree de novo</h5>
+        </div>
+            <hr>
+
+        <div class="form-group row">
+            <div class="col-md-10">
+            <label for="upfiles">Uploaded genomes</label>
+            <select multiple class="form-control selectablein" id="upfiles" name="upfiles" size="10"></select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default" id="remfiles" style="margin-top:25px" onclick="removeAllSeqs()">Remove selected sequences</button>
+            </div>
+        </div>
+        <label for="uploadprog">Upload progress</label>
+    <progress id="uploadprog" style="width:100%" value=0 class="bootstripe bootstripe-active"></progress>
+        <div id="ncbiload" class="hidden"><b>Downloading file from NCBI. This may take a few minutes.</b> <div class="loader"></div>
+        </div>
+    <h2 class="h4alike">Upload Genomes</h2>
+    <div class="form-group row">
+            <label class="control-label col-md-2" for="ncbiacc1"><abbr title="National Center for Biotechnology">NCBI</abbr> Accession Number</label>
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="ncbiacc1" id="ncbiacc1" placeholder="Enter a NCBI accession number" onchange="toggleuploadbtn('ncbibtn',this.value)" onkeyup="toggleuploadbtn('ncbibtn',this.value)"> <!-- hitting enter after entering accession nr automatically submits -->
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="ncbibtn" onclick="uploadSequence('ncbi')" disabled="true"><span class="glyphicon glyphicon-upload"></span> Upload</button>
+        </div>
+    </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2" for="seqfile1">Sequence(s)</label>
+            <div class="col-md-8">
+                <input type="file" class="form-control" id="seqfile1" onkeyup="toggleuploadbtn('seqbtn',this.value);limitseqs(this.id)" onchange="toggleuploadbtn('seqbtn',this.value);limitseqs(this.id)" name="seqfile1" multiple>
+                <p>One genome per sequence file. Limit 20 Genomes per run and maximum of 100Mb per upload</p>
+                <!-- Upload alerts  -->
+                    <div class="alert alert-warning hidden" id="uploadwarn"><strong>Selection is over maximum allowed limits. Please select fewer genomes and ensure they are under the file upload limits.</strong></div>
+                    <div class="alert alert-success hidden" id="uploadsuccess">Upload successful</div>
+                    <div class="alert alert-danger hidden" id="uploadwarning"><strong>Error:</strong> Upload failed</div>
+                    <div class="alert alert-danger hidden" id="errorwarning"><strong>Error:</strong> Invalid accession number or sequence file</div>
+                    <div class="alert alert-danger hidden" id="accwarning"><strong>Error:</strong> Invalid accession number. Accession numbers may only contain alphanumeric characters (A-Z, 0-9) and underscores. Assembly or WGS accession are not supported, please use Refseq / Genbank accessions.</div>
+                    <div class="alert alert-danger hidden" id="duplicatewarning"><strong>Error:</strong> Sequence already uploaded.</div>
+                    <div class="alert alert-warning hidden" id="seqwarn"><strong>Maximum number of files and accession numbers reached.</strong></div>
+
+            </div>
+            <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="seqbtn" onclick="uploadSequence('seqfile')" disabled="true"><span class="glyphicon glyphicon-upload"></span> Upload</button>
+        </div>
+        </div>
+
+        <h2 class="h4alike">Options</h2>
+                <div class="form-group row">
+            <label class="control-label col-md-2" for="email">Enter email address (optional)</label>
+
+            <div class="col-md-8">
+                <input type="text" class="form-control" name="email" id="email" placeholder="(Optional)" autocomplete="email">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2" for="jobname">Enter job title (optional)</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control" name="jobname" id="jobname" placeholder="(Optional)">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2" for="jobname">Advanced</label>
+                    <div class="checkbox col-md-10">
+                            <div class="checkbox wf1opt hidden">
+                                <label><input type="checkbox" value="skip2" id="skip2" name="skip2" checked="true">Select default nearest organisms (skip Step 2)</label>
+                            </div>
+                            <div class="checkbox wf1opt hidden">
+                                <label><input type="checkbox" value="skip3" id="skip3" name="skip3" checked="true">Select default <abbr title="multilocus species tree">MLST</abbr> genes (skip Step 3)</label>
+                            </div>
+
+                            <div class="checkbox wf1opt hidden">
+                                <label data-toggle="tooltip" data-placement="right" title="For interpretation of scores see About section."><input type="checkbox" value="1000" id="boots" name="boots">Perform IQ-TREE Ultrafast Bootstrap analysis (1000 replicates)</label>
+                            </div>
+                            <div class="checkbox wf1opt hidden">
+                                <label data-toggle="tooltip" data-placement="right" title="For information on ModelFinder see"><input type="checkbox" value="MFP" id="modelfinder" name="modelfinder">Run ModelFinder</label>
+                            </div>
+                            <div class="checkbox wf1opt hidden">
+                                <label data-toggle="tooltip" data-placement="right" title="Additional screening of MLST genes to remove genes with greatest topology differences (see about section)"><input type="checkbox" value="True" id="filtmlst" name="filtmlst" checked="checked">Filter inconsistant MLST genes</label>
+                            </div>
+                            <div class="checkbox">
+                                <label data-toggle="tooltip" data-placement="right" title="Rapid alignment mode (MAFFT FFT-NS-2)"><input type="checkbox" value="True" checked="checked" id="fastalign" name="fastalign">Fast alignment mode (MAFFT FFT-NS-2)</label>
+                            </div>
+                            <div class="checkbox">
+                                <label data-toggle="tooltip" data-placement="right" title="By selecting this you consent to our use of cookies. For more information see the Help page"><input type="checkbox" value="keeplink" id="keeplink" name="keeplink">Save link in cookies (viewable on results page under "last results")</label>
+                            </div>
+                            <div class="radio wf1opt hidden">
+                                <label><input type="radio" name="optradio" value="concatenated" checked="checked">Concatenated alignment</label>
+                            </div>
+                            <div class="radio wf1opt hidden">
+                                <label><input type="radio" name="optradio" value="coalescent">Coalescent tree</label>
+                            </div>
+                    </div>
+        </div>
+
+<!-- if file fails/ID not found, unhide warning -->
+        <div class="alert alert-danger selectablewarn hidden"><strong>Error:</strong> No sequences uploaded. Please upload sequences before submitting.</div>
+        {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flashes alert alert-danger">
+    {% for message in messages %}
+      <strong>Error: </strong>{{ message }}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+        <button type="button" class="btn btn-primary disabled" style="width:300px" id="submitjob" onclick="$('#seqfile1').val([]);$('#ncbiacc1').val('');selectAndSend('#sequpload');">Submit Job &raquo;</button>
+        <input type="hidden" id="filesrc" name="filesrc" value="">
+        <input type="hidden" id="workflow" name="workflow" value="2">
+    </form>
+    <hr>
+    <div style="margin-top:10px">
+    <a href="results/example/report" class="btn btn-primary" style="width:220px">Open example output &raquo;</a>
+    <a href="#" class="btn btn-primary" style="width:220px">Download example &raquo;</a>
+    </div>
+</div>
+
+<script src="/static/js/analysispage.js?v=2.1"></script>
+<script>
+$('body').onload=refGenus();
+$('[data-toggle="tooltip"]').tooltip();
+function statusupdate(data) {
+    $("#server-running").html(data.running);
+    $("#server-queue").html(data.waiting);
+    $("#server-done").html(data.finished);
+    }
+
+var timer1 = 0;
+
+$(document).ready(function(){
+    $.getJSON('/serverstatus',statusupdate)
+    timer1 = setInterval(function() {
+        $.getJSON('/serverstatus',statusupdate)
+        }, 20000);
+    });
+
+function toggledesc(descid){
+    $("#wf1desc").addClass("hidden");
+    $(".wf1opt").addClass("hidden");
+    $("#wf2desc").addClass("hidden");
+    $(".wf2opt").addClass("hidden");
+    $("#wf"+descid+"desc").removeClass("hidden");
+    $(".wf"+descid+"opt").removeClass("hidden");
+}
+
+</script>
+{% endblock %}

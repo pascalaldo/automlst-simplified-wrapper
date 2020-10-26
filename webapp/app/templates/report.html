@@ -1,0 +1,156 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<div class="container" style="padding-top:40px">
+<h2>Job: {{ jobname }}</h2>
+<h3 class="page-header" style="margin-top:0px">Results</h3>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alike">Report:</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px">{{ jobid }}</p>
+        </div>
+    </div>
+     <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alike">Status</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px"><b>Finished</b></p>
+        </div>
+    </div>
+    <hr>
+    <!-- Add tree here -->
+    {% if errmsgs %}
+    <div class="alert alert-danger">Error:
+            {% for errormsg in errmsgs %}
+            <p>{{ errormsg }}</p>
+            {% endfor %}
+    </div>
+    {% endif %}
+    <div id="treefail" class="alert alert-danger hidden">Error: Tree failed to build</div>
+    <div id="sizebtns" style="display:none">
+            <!--<button type="button" class="btn btn-primary" aria-label="Increase tree height" data-toggle="tooltip" title="Increase tree height" onclick="resizeTree('upV')"><span class="glyphicon glyphicon-plus"></span></button>
+            <span class="glyphicon glyphicon-resize-vertical" style="font-size:25px;vertical-align:middle"></span>
+            <button type="button" class="btn btn-primary" aria-label="Decrease tree height" data-toggle="tooltip" title="Decrease tree height" onclick="resizeTree('downV')"><span class="glyphicon glyphicon-minus"></span></button>
+            <span style="display:block; padding:2px"></span> -->
+        <div class="row">
+            <div class="col-md-10">
+             <button type="button" class="btn btn-primary" aria-label="Increase tree width" data-toggle="tooltip" data-placement="top" title="Increase tree width" onclick="resizeTree('upH')"><span class="glyphicon glyphicon-plus"></span></button>
+            <span class="glyphicon glyphicon-resize-horizontal" style="font-size:25px;vertical-align:middle"></span>
+            <button type="button" class="btn btn-primary" aria-label="Decrease tree width" data-toggle="tooltip" data-placement="top" title="Decrease tree width" onclick="resizeTree('downH')"><span class="glyphicon glyphicon-minus"></span></button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary" aria-label="Print tree" data-toggle="tooltip" data-placement="top" title="Print tree" onclick="window.print();"><span class="glyphicon glyphicon-print"></span></button>
+                <button type="button" class="btn btn-primary" aria-label="Open tree in new window" data-toggle="tooltip" data-placement="top" title="Open tree in new window" onclick="treePopup()"><span class="glyphicon glyphicon-new-window"></span></button>
+            </div>
+            </div>
+            <span style="display:block; padding:2px"></span>
+        <button type="button" class="btn btn-primary" onclick="toggleScale();" style="width:250px">Toggle scaled/unscaled branches</button>
+        <span style="display:block; padding:2px"></span>
+        <div class="btn-group">
+            <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width:200px">Display ANI groups <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li style="width:200px"><a href="#" onclick="showAniGroups(97);">97% cutoff</a></li>
+                <li style="width:200px"><a href="#" onclick="showAniGroups(95);">95% cutoff</a></li>
+                <li style="width:200px"><a href="#" onclick="showAniGroups(90);">90% cutoff</a></li>
+                <li style="width:200px"><a href="#" onclick="showAniGroups(85);">85% cutoff</a></li>
+            </ul>
+                </div>
+            <button type="button" class="btn btn-primary" onclick="showTypeStrains();" style="width:200px">Display strain info</button>
+            <button type="button" class="btn btn-primary" onclick="resetColor();" style="width:200px">Reset colors</button>
+        </div>
+    </div>
+    <br />
+    <div id="colorkey" class="panel panel-primary hidden">
+        <div class="panel-heading" id="colorscheme">Color scheme</div>
+        <div class="panel-body hidden" id="anicolorscheme"><span id="colorblock1" class="glyphicon glyphicon-stop" style="color:#00990d"></span><span id="colorblock2" class="glyphicon glyphicon-stop" style="color:#9900ff"></span><span id="colorblock3" class="glyphicon glyphicon-stop" style="color:#e6007a"></span><span id="colorblock4" class="glyphicon glyphicon-stop" style="color:#0000CD"></span> <abbr title="average nucleotide identity">ANI</abbr> groups (cutoff: <span id="anicutoff"></span>%)</div>
+        <div class="panel-body hidden" id="tscolorscheme"><span class="glyphicon glyphicon-stop" style="color:#0000ff"></span> Query sequence <br />
+            <span class="glyphicon glyphicon-stop" style="color:#cc3300"></span> Outgroup <br />
+            <span class="glyphicon glyphicon-stop" style="color:#1f7a1f"></span> Type strain
+        </div>
+        <div class="panel-body hidden" id="singleani"><span class="glyphicon glyphicon-stop" id="aniicon" style="color:black"></span> <abbr title="average nucleotide identity">ANI</abbr> group <span id="selectedani"></span></div>
+    </div>
+    <div id="svgCanvas">
+
+            <!-- <img src="/static/images/Socotra_dragon_tree.jpeg" alt="loading screen" class="thumbnail" style="width:50%;margin:auto">-->
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" aria-valuetext="Loading" style="width:100%"></div>
+        </div>
+        <p style="text-align:center"><b>Loading tree...</b></p>
+    </div>
+<div id="searchdiv" style="display:none">
+    <label for="searchtree">Search organisms:</label>
+        <input type="text" id="searchtree" placeholder="Search...">
+</div>
+
+    <!-- <button type="button" class="btn btn-primary" onclick="drawTree('{{ jobid }}')" style="margin-top:20px">Click</button> -->
+    <hr>
+    <h4>Most similar organisms</h4>
+    <table class="table table-bordered table-hover" cellspacing="0" id="mashinfo" width="100%">
+        <thead>
+        <tr>
+            <th>Query organism</th>
+            <th>Reference assembly ID</th>
+            <th>Reference name</th>
+            <th>Mash distance</th>
+            <th>estimated <abbr title="average nucleotide identity">ANI</abbr></th>
+            <th>P-value</th>
+            <th>Genus</th>
+            <th>Order</th>
+            <th>Type strain</th>
+        </tr>
+        </thead>
+    </table>
+    <hr>
+
+         <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" style="width:200px" id="treedownl" name="treedownl" data-toggle="dropdown"><span class="glyphicon glyphicon-download-alt"></span> Download tree <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <li style="width:200px"><a href="/results/{{ jobid }}/tree?format=newick">Download Newick file</a></li>
+            <!-- <li><a href="/results/{{ jobid }}/tree?format=nexml">Download NeXML file</a></li>
+            <li><a href="/results/{{ jobid }}/tree?format=phyloxml">Download PhyloXML file</a></li>-->
+            <li id="downlink" style="width:200px"><a id="imgdownl" href="#" target="_blank">Download svg image</a></li>
+            <!-- <li id="pnglink"><a id="pngdownl" href="#" target="_blank" onclick="downloadPng();">Download png image</a></li>-->
+        </ul>
+        </div>
+    <!-- <a href="/results/{{ jobid }}/tree?format=newick" class="btn btn-primary" role="button" style="width:200px" id="treedownl" name="treedownl"><span class="glyphicon glyphicon-download-alt"></span> Download tree</a> -->
+    <a href="/results/{{ jobid }}/downloadlists?downl=alignment" type="button" class="btn btn-primary" style="width:200px" id="aligndownl" name="aligndownl"><span class="glyphicon glyphicon-download-alt"></span> Download alignments</a>
+    <a href="/results/{{ jobid }}/downloadlists?downl=mlstlist" type="button" class="btn btn-primary" style="width:200px" id="mlstdownl" name="mlstdownl" ><span class="glyphicon glyphicon-download-alt"></span> Download MLST list</a>
+    <!--<div class="btn-group">-->
+    <!--<button type="button" class="btn btn-primary dropdown-toggle" style="width:200px" id="orgdownl" name="orgdownl" data-toggle="dropdown"><span class="glyphicon glyphicon-download-alt"></span> Download organism list <span class="caret"></span></button>-->
+        <!--<ul class="dropdown-menu" role="menu">-->
+            <!--<li><a href="/results/{{ jobid }}/downloadorgs?format=json">Download JSON file</a></li>-->
+            <!--<li><a href="/results/{{ jobid }}/downloadorgs?format=txt">Download tab-separated text</a></li>-->
+        <!--</ul>-->
+        <!--</div>-->
+    <a href="/results/{{ jobid }}/downloadmash" class="btn btn-primary" role="button" style="width:200px" id="mashdownl" name="mashdownl"><span class="glyphicon glyphicon-download-alt"></span> Download Mash distances</a>
+    <!-- button layout? -->
+        {% if workflow != 2 and jobid != 'example' %}
+    <hr>
+    <button type="button" class="btn btn-primary" id="reanalyzebtn">Reanalyze from Step 2</button>
+    <div class="invisible" id="confirmreanalyze">
+    <a href="/results/{{ jobid }}/reanalyze?confirm=true" role="button" class="btn btn-warning" style="width:300px" id="resubmit" name="resubmit"><span class="glyphicon glyphicon-repeat"></span> Confirm and reanalyze</a>
+    <div class="alert alert-warning" style="margin-top:10px" id="reanalyzewarn"><strong>Warning:</strong> Reanalyzing will clear your current results. Ensure you have saved your results before proceeding.</div>
+        {% endif %}
+        <input type="hidden" id="jobinfo" name="jobinfo" value="{{ jobid }}">
+        <input type="hidden" id="pageid" name="pageid" value="report">
+        <input type="hidden" id="lastani" value="ANI95">
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+$("#reanalyzebtn").on("click",function(){
+    $("#confirmreanalyze").removeClass("invisible");
+    $("#reanalyzebtn").addClass("invisible");
+});
+</script>
+<script src="/static/js/mashtable.js?v=1.0"></script>
+<script src="https://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+<script src="https://cdn.rawgit.com/tntvis/tnt.utils/master/build/tnt.utils.js"></script>
+<script src="http://tntvis.github.io/tnt.tree/build/tnt.tree.min.js" charset="utf-8"></script>
+<script src="/static/js/report-tnt.js?v=1.0"></script>
+{% endblock %}

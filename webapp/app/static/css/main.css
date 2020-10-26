@@ -1,0 +1,668 @@
+/*
+ * Globals
+ */
+
+a{
+  color: #151580;
+  text-decoration: none;
+}
+a:hover,a:focus,a:active{
+  color: #000055;
+}
+
+h1,h2,h3,h4{
+    color:#151580;
+}
+
+/* Custom default button
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}*/
+
+.btn-primary {
+  color: #fff;
+  background-color: #151580;
+  border-color: #1B1B1B;
+  background: #151580; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #3838AA, #151580); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #3838AA, #151580); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #3838AA, #151580); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #3838AA, #151580); /* Standard syntax */
+}
+/*.btn-primary:focus,
+.btn-primary.focus {
+  color: #fff;
+  background-color: #151580;
+  border-color: #1B1B1B;
+} */
+/* alternative styling for focus - better indication of focus when using keyboard navigation? */
+.btn-primary:focus,
+.btn-primary.focus{
+  color: #fff;
+  background-color: #6060D7;
+  border-color: #1B1B1B;
+  background: #6060D7; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #6060D7, #151580); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #6060D7, #151580); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #6060D7, #151580); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #6060D7, #151580); /* Standard syntax */
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #6060D7;
+  border-color: #1B1B1B;
+  background: #6060D7; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #6060D7, #151580); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #6060D7, #151580); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #6060D7, #151580); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #6060D7, #151580); /* Standard syntax */
+}
+
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #151580;
+  border-color: #1B1B1B;
+}
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.open > .dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,
+.btn-primary.active:focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus,
+.btn-primary.active.focus,
+.open > .dropdown-toggle.btn-primary.focus {
+  color: #fff;
+  background-color: #151580;
+  border-color: #1B1B1B;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  background-image: none;
+}
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled.focus,
+.btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus {
+  background-color: #353535;
+  border-color: #1B1B1B;
+}
+.btn-primary .badge {
+  color: #151580;
+  background-color: #fff;
+}
+/* quick fix for button issue */
+
+button.disabled {
+    pointer-events:none;
+}
+
+/*
+ * Base structure
+ */
+
+html{
+  position: relative;
+  min-height: 100%;
+  min-width: 300px;
+  padding-bottom: 20px;
+  padding-top: 50px;
+}
+body{
+    height: 100%;
+    padding-top: 0px;
+    margin-bottom: 60px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+
+/*
+ * Header
+ */
+ .navbar-brand,
+.navbar-nav li a {
+    line-height: 50px;
+    height: 50px;
+    padding-top: 0;
+}
+
+ .navbar-main {
+    min-width: 300px;
+    margin-bottom: 0px;
+    background-color: #151580
+}
+.navbar-main li{
+    background-color: #151580
+}
+
+.navbar-main li:hover{
+  background: #3838AA; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(bottom, #3838AA, #151580); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(top, #3838AA, #151580); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(top, #3838AA, #151580); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to top, #3838AA, #151580); /* Standard syntax */
+}
+.navbar-brand {
+    font-size:16px;
+}
+
+/*
+ * Front
+ */
+
+.frontimgs{
+    border: 1px solid grey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 130px;
+    width: 300px;
+}
+
+.frontjt li{
+    font-size: 20px;
+}
+.frontjt h2{
+    color: #FFFFFF;
+    text-shadow: 2px 2px #111;
+}
+.frontjt {
+  color:#FFFFFF;
+  min-height: 300px;
+  background-image: url('/static/images/protbg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: #8A8A8A; /* For browsers that do not support gradients */
+}
+
+.darkbarbg{
+    width: 100%;
+    background: rgb(30,30,30);
+    background: rgba(15,15,15,.8);
+}
+
+/*
+ * About
+ */
+
+.workflowimg{
+    margin: 0 auto;
+    padding: 10px 15% 10px 15%;
+}
+
+/*
+ * Analyze
+ */
+
+.serverstats{
+  padding-left: 15px;
+  width: 100%;
+  margin: 0px;
+  background: #353535; /* For browsers that do not support gradients */
+}
+.serverstats li{
+  color: #C3C3C3;
+}
+li.statuslabel{
+    color: #FFF;
+}
+
+td.seqid{
+  color: #151580;
+}
+
+td.hittype_Core{
+    color: #ffcc44;
+    font-weight: bold;
+    text-shadow:
+   -1px -1px 0 #333,
+    1px -1px 0 #333,
+    -1px 1px 0 #333,
+     1px 1px 0 #333;
+}
+td.hittype_CoreRes{
+    color: #9900ff;
+    font-weight: bold;
+}
+td.hittype_DUF{
+    color: #000000;
+    font-weight: bold;
+}
+td.hittype_ResModel{
+    color: #ccff44;
+    font-weight: bold;
+    text-shadow:
+   -1px -1px 0 #333,
+    1px -1px 0 #333,
+    -1px 1px 0 #333,
+     1px 1px 0 #333;
+}
+
+/*
+ * Contact
+ */
+
+.red{
+    color:red;
+    }
+.form-area
+{
+    background-color: #FAFAFA;
+	padding: 10px 40px 60px;
+	margin: 10px 0px 60px;
+	border: 1px solid GREY;
+	}
+
+/*
+ * Showresults
+ */
+
+.corecirckey{
+    font-size: 11pt;
+}
+
+#corecircle{
+    height: 250px;
+    width: 250px;
+    overflow: none;
+}
+
+#corecirclabel{
+    width: 250px;
+    height: 50px;
+    padding-left: 25px;
+    padding-right: 25px;
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #151580;
+}
+
+.panel-primary {
+    border-color: #1B1B1B;
+}
+
+.panel-primary>.panel-heading {
+    background-color: #151580;
+    border-color: #1B1B1B;
+    font-weight: bold;
+}
+
+
+
+.smallbox {
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.summarystats td{
+    font-size: 14pt;
+}
+
+td.details-control:hover {
+    background-size: 15px 15px;
+}
+td.details-control {
+    background: url('/static/images/expcolbtn1.png') no-repeat center center;
+    background-size: 10px 10px;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('/static/images/expcolbtn2.png') no-repeat center center;
+    background-size: 10px 10px;
+}
+
+/* show labels are clickable! */
+g.leaf>text.tnt_tree_label {
+    cursor:pointer;
+}
+
+.resultTable{
+    width:100%;
+}
+
+.summtab_yes{
+    font-weight: bold;
+    background-color: #57AC57;}
+
+.treeholder{
+    width: 100%;
+    padding: 25px;
+    height: 400px;
+    overflow: scroll;
+    border: 2px solid GREY;
+}
+
+.zoombtn{
+    font-size: 18px;
+    color: #000099;
+}
+.logwell{
+    height:500px;
+    display:none;
+    overflow: scroll;
+}
+
+.logwell code{
+    font-size: 12px;
+    color: #333333;
+    background: #FFFFFF;
+    white-space: nowrap;
+}
+
+/*
+ * Footer
+ */
+.footer {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  min-height: 50px;
+  background-color: #fff;
+}
+.footer img{
+    margin: 5px;
+}
+/* heading styles for better heading hierarchy with same look */
+.frontjt h1.h2alike {
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: 500;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    text-shadow: 2px 2px #111;
+}
+
+.h3alike {
+    color:#151580;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.h3alike .small {
+    font-weight: normal;
+    line-height: 1;
+    color: #777;
+    font-size: 65%;
+}
+
+.h4alike {
+    color:#151580;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.h4alike .small {
+    font-weight: normal;
+    line-height: 1;
+    color: #777;
+    font-size: 75%;
+}
+
+/* Links for analyze pages */
+.steps {
+    font-size:24px;
+    font-weight:500;
+    color:#10006d;
+}
+
+.steps-disabled {
+    font-size:24px;
+    font-weight:500;
+    color:#595959;
+    pointer-events:none;
+}
+
+.progress-bar {
+    background-color: #3d3d8f;
+}
+/* reset appearance of working progress bar */
+progress.progress-boots[value], progress.bootstripe[value] {
+-webkit-appearance:none;
+-moz-appearance:none;
+appearance:none;
+border:none;
+height:20px;
+}
+
+progress.progress-boots[value]::-webkit-progress-bar,  progress.bootstripe[value]::-webkit-progress-bar {
+height: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+}
+
+progress.progress-boots[value]::-moz-progress-bar {
+height: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  background-color: #3d3d8f;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+  transition: width .6s ease;
+}
+
+progress.progress-boots[value]::-webkit-progress-value {
+width: 0;
+  height: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  background-color: #3d3d8f;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+  transition: width .6s ease;
+}
+
+progress.bootstripe[value]::-moz-progress-bar {
+height: 20px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  background-color: #3d3d8f;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+  transition: width .6s ease;
+background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+          background-size: 40px 40px;
+}
+
+progress.bootstripe[value]::-webkit-progress-value {
+width: 0;
+  height: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  background-color: #3d3d8f;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+  transition: width .6s ease;
+background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+          background-size: 40px 40px;
+}
+
+progress.bootstripe-active[value]::-webkit-progress-value {
+-webkit-animation: progress-bar-stripes 2s linear infinite;
+       -o-animation: progress-bar-stripes 2s linear infinite;
+          animation: progress-bar-stripes 2s linear infinite;
+}
+
+@-webkit-keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@-o-keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* loader */
+.loader {
+    border: 3px solid #bfbfbf;
+    border-top: 3px solid #3d3d8f;
+    border-radius:50%;
+    width:15px;
+    height:15px;
+    animation: spin 2s linear infinite;
+    -webkit-animation: spin 2s linear infinite;
+    display: inline-block;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% {transform: rotate(0deg); }
+  100% {transform: rotate(360deg); }
+}
+
+/* highlight user input in tree */
+.userseq {
+color:#ccccff !important;
+}
+
+/* tabs for analyze page */
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+background-color:#151580;
+color:#ffffff
+}
+
+/* pagination for tables */
+.pagination>.active>a,.pagination>.active>a:focus,.pagination>.active>a:hover{
+    background-color:#151580;
+    border-color:#151580
+}
+
+.pagination>li>a {
+    color:#151580
+}
+
+.pagination>li>a:hover, .pagination>li>a:focus {
+    color:#3d3d8f
+}
+
+/* table child row button */
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+    background-color:#151580 !important;
+}
+
+/*more contrast for warning text*/
+.alert-danger, .text-danger {
+color:#6C2726;
+}
+.alert-warning {
+color:#994d00;
+}
+
+small, .small, h1 small, h1 .small, h2 small, h2 .small, h3 small, h3 .small, h4 small, h4.small {
+color: #595959;
+}
+
+a>small {
+color: #151580;
+}
+.pagination>.disabled>a {
+color: #595959;
+}
+
+
+
+@media screen and (max-width:768px){
+    #svgCanvas {
+        overflow:auto;
+    }
+}
+
+@media print {
+
+
+:not(.printable) {
+visibility: hidden;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+.printable, .printable *  {
+visibility:visible;
+}
+
+}

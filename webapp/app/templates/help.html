@@ -1,0 +1,347 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<link href="/static/css/sidebar.css" rel="stylesheet">
+<div id="wrapper">
+<div id="sidebar-wrapper">
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    <li>
+                        <a href="#query" data-scroll>
+                            <span class="fa fa-anchor solo">Workflows</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#work2" data-scroll>
+                            <span class="fa fa-anchor solo" style="padding-left:15px">Accelerated</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#work1" data-scroll>
+                            <span class="fa fa-anchor solo" style="padding-left:15px">Advanced</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#results" data-scroll>
+                            <span class="fa fa-anchor solo">Results</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#aniid" data-scroll>
+                            <span class="fa fa-anchor solo" style="padding-left:15px">ANI estimate</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tree" data-scroll>
+                            <span class="fa fa-anchor solo" style="padding-left:15px">Tree</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#cookies" data-scroll>
+                            <span class="fa fa-anchor solo">Cookies</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+<div id="page-content-wrapper">
+<div class="page-content inset container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+    <h2 class="page-header" id="query">Selecting a workflow</h2>
+    </div>
+        <div class="col-md-4">
+            <img src="/static/images/help/2018-02-14-workselect.png" alt="workflow selection" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-8">
+            <ol>
+                <li><h5>Select workflow</h5>
+                <ol style="list-style-type:lower-alpha;">
+                    <li><b>Accelerated workflow</b>: User-submitted sequences are automatically added to a reference
+                        tree of the user's choice. </li>
+                    <li><b>Advanced workflow</b>: User is able to choose from which additional species to construct the
+                        tree in detail, and can choose which genes to use for the <abbr title="multilocus species tree">MLST</abbr>.</li>
+                </ol></li>
+            </ol>
+        </div>
+    </div>
+        <h3 class="page-header" id="work2">Accelerated workflow</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <img src="/static/images/help/2018-02-14-accelerated.png" alt="submission screen for the accelerated workflow" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-4">
+            <ol start="2">
+                <li>Select the reference tree to which the uploaded sequences will be added. By default, autoMLST will
+                attempt to detect the closest genus on its own.</li>
+                <li>Submit the sequences to be added to the tree.
+                <ol style="list-style-type:lower-alpha;">
+                    <li>Retrieve an <abbr title="National Center for Biotechnology">NCBI</abbr> sequence by its accession number.</li>
+                    <li>Upload one or multiple sequence files. Acceptable formats are FASTA, Genbank (and EMBL?) files. <br />
+                    Please make sure that each file only contains the genome of one organism.</li>
+                    <li>Remove selected sequences from the list.</li>
+                </ol>
+                    <br />
+                    <strong>Note</strong>: a maximum of 50 sequences may be added to the tree.
+                </li>
+                <li>Several additional options for saving job results and being notified about job status are available: <ol style="list-style-type:lower-alpha">
+                <li>Optional: submit an email address so you can be notified about the status of your autoMLST job.</li>
+                <li>Optional: give your job a descriptive title. <br />
+                    <strong>Note</strong>: you will not be able to search for your
+                job by its title, only by its job <abbr title="identification">ID</abbr>.</li>
+                <li>Optional: save a link to the job in a list of your recent jobs on the <a href="/results">Results</a>
+                    page. <br />
+                <strong>Note</strong>: saving links of your recent jobs requires setting a cookie. For information on
+                    our use of cookies see <a href="#cookies">below</a>.</li>
+                </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <h3 class="page-header" id="work1">Advanced workflow</h3>
+    <h4>Step 1 <small>Sequence submission</small></h4>
+    <div class="row">
+    <div class="col-md-8">
+        <img src="/static/images/help/2018-02-06-advanced.png" alt="options for the advanced workflow" class="img-responsive" style="border:1px solid #cccccc;">
+        <br />
+        <img src="/static/images/help/2018-02-14-advanced.png" alt="selection screen for the advanced workflow" class="img-responsive" style="border:1px solid #cccccc;">
+    </div>
+    <div class="col-md-4">
+        <ol start="2">
+            <li>Select options:
+                <ul> <li>skip manual selection of organisms for tree construction (step 2) or genes to align (step 3) and
+                automatically proceed with the best 50 organisms or best 100 genes when they are found.</li>
+                <li>perform bootstrapping with Ultrafast Bootstrap (default: no bootstrapping)</li>
+                <li>run ModelFinder to find the optimal model for tree building</li>
+                </ul></li>
+                            <li>autoMLST can create either a concatenated alignment or a coalescent tree.
+                <ul>
+                    <li><b>Concatenated alignment</b>: the standard <abbr title="multilocus sequence analysis">MLSA</abbr>. This strategy performs better if most gene trees
+                        don't diverge from the species tree or diverge very little.  </li>
+                    <li><b>Coalescent tree</b>: constructs the species tree from the individual gene trees. This strategy
+                    performs better than concatenated alignments if there are large differences between a gene tree and
+                    the species tree. However, if phylogenetic signal is only present in some sequences, it may be lost.</li>
+                </ul>
+                </li>
+            <li>Submit the sequences to construct the tree.
+             <ol style="list-style-type:lower-alpha;">
+                    <li>Retrieve an <abbr title="National Center for Biotechnology">NCBI</abbr> sequence by its accession number.</li>
+                    <li>Upload one or multiple sequence files. Acceptable formats are FASTA, Genbank (and EMBL?) files. <br />
+                    Please make sure that each file only contains the genome of one organism.</li>
+                    <li>Remove selected sequences from the list.</li>
+                </ol>
+                 <br />
+                    <strong>Note</strong>: a maximum of 50 sequences may be added to the tree.
+            </li>
+            <li>Several additional options for saving job results and being notified about job status are available: <ol style="list-style-type:lower-alpha">
+                <li>Optional: submit an email address so you can be notified about the status of your autoMLST job.</li>
+                <li>Optional: give your job a descriptive title. <br />
+                    <strong>Note</strong>: you will not be able to search for your
+                job by its title, only by its job <abbr title="identification">ID</abbr>.</li>
+                <li>Optional: save a link to the job in a list of your recent jobs on the <a href="/results">Results</a>
+                    page. <br />
+                <strong>Note</strong>: saving links of your recent jobs requires setting a cookie. For information on
+                    our use of cookies see <a href="#cookies">below</a>.</li>
+                </ol>
+                </li>
+        </ol>
+    </div>
+    </div>
+<br />
+        <!--<div class="row">
+        <div class="col-md-8">
+            <img src="/static/images/help/step1new2.png" alt="loading screen for the classical workflow" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-4">
+        <ol start="3">
+            <li>Nearest organisms and genes to use for the MLST can either be selected manually or automatically.
+            Manual selection enables the user to modify the list of organisms or genes autoMLST uses to construct the
+            tree; automatic selection automatically proceeds with the 50 nearest organisms or 10 best genes as found
+            by autoMLST's algorithm, requiring no further user input. <br />
+            <b>Note:</b> If no boxes are checked when calculations are complete, autoMLST expects manual selection of organisms and
+                genes.
+            </li>
+        </ol>
+    </div>
+        </div>
+    <br /> -->
+    <h4>Step 2 <small>Species and outgroup selection</small></h4> <!-- do prettier layout! -->
+    <div class="row">
+        <div class="col-md-8">
+            <img src="/static/images/help/2018-02-06-step2table.png" alt="species selection options of the species and outgroup selection screen" class="img-responsive" style="border:1px solid #cccccc;">
+            <img src="/static/images/help/2018-02-06-step2outgroups.png" alt="outgroup selection options of the species and outgroup selection screen" class="img-responsive" style="border:1px solid #cccccc;margin-top:5px;">
+        </div>
+        <div class="col-md-4">
+            <ol start="6">
+                <li>By default, autoMLST picks all user-submitted sequences and the closest organisms it detects to
+                    continue, to a total of 50. Users are able to add organisms from the organism list to this selection
+                    or remove them. <br />
+                <b>Note:</b> A maximum of 50 organisms will be used for tree construction; additional species above this
+                number will not be used. Sequences past this limit are highlighted in red.</li>
+                <li>Additional information on the selected species is displayed, sorted by the mean distance to the
+                    query sequences by default. Users can pick what information is displayed by choosing options to
+                show/hide columns.
+                <ol style="list-style-type:lower-alpha;">
+                    <li>By default, the table is filtered to only display information on the sequences the user selected.
+                    However, users may search the table for species, genera, families, orders or phyla by their name or
+                        the taxonomy <abbr title="identification">ID</abbr> numbers assigned by the <abbr title="National Center for Biotechnology">NCBI</abbr>.</li>
+                </ol>
+                </li>
+                <li>By default, up to 5 species are used for outgroups. Users are able to add organisms from the
+                outgroup list to this selection or remove them. <br />
+                <b>Note:</b> A maximum of 5 outgroups will be used; additional species above this number will not be
+                used. Sequences past this limit are highlighted in red.</li>
+            </ol>
+        </div>
+    </div>
+    <br />
+    <h4>Step 3 <small>Gene selection</small></h4>
+    <div class="row">
+        <div class="col-md-8">
+            <img src="/static/images/help/2018-03-01-step3-with-warning.png" alt="multilocus sequence analysis gene selection screen" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-4">
+            <ol start="9">
+                <li>autoMLST selects 100 genes for the <abbr title="multilocus species tree">MLST</abbr> by default. Users are able to add or remove genes from this
+                selection. <br />
+                <b>Note:</b> A maximum of 100 genes will be used for the <abbr title="multilocus species tree">MLST</abbr>; additional genes above this number will
+                    not be used.</li>
+                <li>Not all potential <abbr title="multilocus species tree">MLST</abbr> genes may be found in all selected species. In this case, a warning will be
+                displayed and the species limiting the number of <abbr title="multilocus species tree">MLST</abbr> genes listed.<br />
+                    Users then have the choice to remove the listed organisms in order to proceed with their selection. <br/>
+                Genes which require the deletion of one or more organisms are highlighted in yellow.
+                </li>
+                <li>Additional information on the selected genes is displayed, sorted by gene name by default.
+                <ol style="list-style-type:lower-alpha">
+                    <li>By default, the table is filtered to only display information on the sequences the user selected.
+                    However, users may search the table for genes by their name, accession number, function or
+                    description.</li>
+                </ol>
+                </li>
+
+            </ol>
+        </div>
+    </div>
+
+    <h2 class="page-header" id="results">Results</h2>
+    <h3 id="aniid">Mash-based <abbr title="average nucleotide identity">ANI</abbr> estimation</h3>
+    <div class="row">
+    <div class="col-md-8">
+        <img src="/static/images/help/2018-02-06-anitable.png" alt="table of organisms closest to query by average nucleotide identity" class="img-responsive" style="border:1px solid #cccccc;">
+    </div>
+    <div class="col-md-4">
+    <ol>
+        <li>Both during the loading screens and in the final results page, the user is presented with a table of the
+            organisms closest to their submitted sequences, as determined by an estimate of the average nucleotide
+        identity. The table is sorted by highest <abbr title="average nucleotide identity">ANI</abbr> by default. The
+        amount of information displayed in the table by default depends on screen width; users may view the remaining
+        information by clicking the row in question.
+        <ol style="list-style-type:lower-alpha">
+            <li>Users may search the table for organisms by their name, genus, order or the <abbr title="identification number">ID</abbr>
+            of a reference genome assembly.</li>
+        </ol>
+        </li>
+    </ol>
+    </div>
+</div>
+
+    <h3 id="tree">Tree</h3>
+        <div class="row">
+    <div class="col-md-8">
+        <img src="/static/images/help/2018-02-14-newtreeoptions.png" alt="tree options" class="img-responsive" style="border:1px solid #cccccc;">
+        <br />
+        <div class="row">
+        <div class="col-md-6">
+        <img src="/static/images/help/2018-02-14-unscaled.png" alt="phylogenetic tree with unscaled branches" class="img-responsive" style="border:1px solid #cccccc;">
+            </div>
+        <div class="col-md-6">
+        <img src="/static/images/help/2018-02-14-scaled.png" alt="phylogenetic tree with scaled branches" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+            </div>
+        <br />
+        <br />
+        <img src="/static/images/help/2018-03-01-anischeme.png" alt="legend for different display options" class="img-responsive" style="border:1px solid #cccccc;">
+        <br />
+        <br />
+        <div class="row">
+        <div class="col-md-4">
+            <img src="/static/images/help/2018-03-01-anicolor.png" alt="phylogenetic tree with all labels colored according to average nucleotide identity grouping" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-4">
+            <img src="/static/images/help/2018-02-14-typestrains.png" alt="phylogenetic tree with labels of type strains, outgroups and query sequences colored" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+        <div class="col-md-4">
+            <img src="/static/images/help/2018-03-01-singleani.png" alt="phylogenetic tree with labels of one clade colored according to average nucleotide identity grouping" class="img-responsive" style="border:1px solid #cccccc;">
+        </div>
+            </div>
+        <br />
+        <img src="/static/images/help/2018-03-01-downloads.png" alt="download options" class="img-responsive" style="border:1px solid #cccccc;">
+    </div>
+    <div class="col-md-4">
+        <p>Depending on selected workflow and user choices, a tree generated from a multilocus sequence alignment, a
+            coalescent tree or a tree generated by addition of user sequences to a reference tree is presented to the
+            user. <br />
+        User-submitted sequences are prefixed with the abbreviation "QS"; their respective nodes are colored blue. <br />
+        Outgroups are prefixed with the abbreviation "OG";their respective nodes are colored red. <br />
+        Type strains are prefixed with the abbreviation "TS"; their respective nodes are colored green. <br />
+        It is also possible to search for organisms in the tree; organisms matching the search term are displayed with
+            a larger font size.<br />
+        Several details about tree visualization may be changed by the user:</p>
+        <ol>
+            <li>The tree can be resized horizontally in steps of 100 pixels.</li>
+            <li>The tree may be displayed in two different ways: with unscaled branch lengths, as a rectangular cladogram (2a),
+                or with scaled branch lengths, as a rectangular phylogram (2b).
+            </li>
+            <li>Label coloration may be changed in several ways: <ol style="list-style-type:lower-alpha">
+                <li>All organisms in the reference database have been grouped by their pairwise <abbr title="average nucleotide identity">ANI</abbr>
+            as approximated by Mash; see the <a href="/about">About page</a> for details; all of these groupings may be visualized
+            by label color under the option "Display ANI groups" (note that label colors may be repeated). <abbr title="average nucleotide identity">ANI</abbr>
+                groups were identified using levels from 95%-99% sequence similarity as cutoff; all these different groups
+                may be displayed.</li>
+                <li>Type strain, outgroup and query sequence coloration may also be applied to the labels by selecting
+                "Display strain info". Organisms that are neither a type strain, an outgroup nor a query sequence are
+                grayed out in this display.</li>
+                <li>By clicking an organism's label, it is also possible to highlight only the <abbr title="average nucleotide identity">ANI</abbr>
+                group containing this organism in the tree. The last selected cutoff level for the whole tree is used;
+                    if no cutoff level has been selected, the cutoff used is 95%. Note that this has no effect for
+                    organisms that do not belong to any group at this cutoff.</li>
+            </ol>
+                For each color scheme, a legend is also displayed.
+            </li>
+
+        </ol>
+        <p>Note that the example images show Ultrafast Bootstrap values. Depending on user choices and workflow, the
+            tree may display likelihood values (in the default workflow), Ultrafast Bootstrap values or no support
+            values at all (in the advanced workflow). For interpretation of the support values, please refer to the
+            <a href="/about">About page</a>.
+        </p>
+        <p>Additional information is also available:</p>
+        <ol start="4">
+            <li>Users may download <ul>
+                <li>the tree in Newick format (without colors)</li>
+                <li>an image of the tree in .svg format (with colors)</li>
+                <li>a compressed folder of the alignments from which it was constructed </li>
+                <li>the list of genes used in the <abbr title="multilocus sequence analysis">MLSA</abbr></li>
+                <li>the list of organisms used</li>
+                <li>the full list of estimated <abbr title="average nucleotide identities">ANIs</abbr> between their
+                    organisms and the reference organisms.</li>
+                </ul>
+                </li>
+        </ol>
+        <p>In the advanced workflow, it is also possible to redo the analysis with different additional species and <abbr title="multilocus species tree">MLST</abbr>
+            genes by selecting "reanalyze from Step 2". <strong>Note that this will clear the existing results for this
+                job.</strong></p>
+        <!-- <b>Note:</b> The "reanalyze from Step 2" option only exists in the classical workflow. The accelerated workflow proceeds automatically
+        after the initial sequences have been submitted.</p> -->
+    </div>
+        </div>
+    <h2 class="page-header" id="cookies">Cookies</h2>
+    <div>
+        <p>Users may choose to store the link to a job they submit in their last results (accessible on the results page).
+            This is done via cookies; selecting the option to store the link means you consent to autoMLST's use of
+        cookies for this. Cookies are only stored for the purpose of remembering the job numbers of the jobs submitted
+        by the user; all that is stored is the job number.</p>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

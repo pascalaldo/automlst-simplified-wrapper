@@ -1,0 +1,144 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<div class="container" style="padding-top:40px;">
+    <h2>{{ jobname }}</h2> <!-- can be prettier probably -->
+    <span class="sr-only">Workflow progress: The previous step was </span><a href="/analyze" class="steps">Step 1 &raquo;</a> <span class="sr-only">The current step is </span><a href="#" class="steps">Step 2 <small>Species and outgroup selection</small> &raquo;</a> <span class="sr-only">The next steps are </span><span class="steps-disabled">Step 3 &raquo;</span> <span class="steps-disabled">Results</span>
+    <hr>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alike">Job ID</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px">{{ jobid }}</p> <!-- tweak margin? -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alike">Status</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px"><b>Species and outgroup selection (Step 2)</b></p>
+        </div>
+    </div>
+    <hr>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width:33%"></div>
+    </div>
+    <h3 class="page-header">Species</h3>
+    <form action="orgin" method="post" enctype="multipart/form-data" name="species" id="species">
+        <div class="row">
+        <div class="form-group col-md-5">
+            <h4>Species found</h4>
+            <label for="speciessel">Select additional species (default: closest 50)</label>
+            <select multiple class="form-control" id="speciessel" size="40" style="width:100%;overflow:auto;">
+            </select>
+            <button type="button" class="btn btn-primary" style="margin-top:10px;margin-bottom:10px" onclick="loadMore();">Load more organisms</button>
+            <input class="form-control" id="speciessearch" type="text" placeholder="Search species" aria-label="Search species">
+        </div>
+            <div class="col-md-2" style="padding-top:65px">
+                <button type="button" class="btn btn-default" style="width:100%" onclick="addtolist('#speciessel','#specieslist'); refreshView('#specieslist',50,'#seqlimit'); idSearch(); outgroupPick()">Add to list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px;" onclick="removeAllFromList('#specieslist'); refreshView('#specieslist',50,'#seqlimit'); idSearch(); outgroupPick();">Remove from list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="addtolist('#specieslist','#specieslist'); refreshView('#specieslist',50,'#seqlimit'); idSearch(); outgroupPick();">Move to top</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="resetSels('#speciessel','#specieslist',50); refreshView('#specieslist',50,'#seqlimit'); idSearch(); outgroupPick();">Reset to default</button>
+            </div>
+            <div class="form-group col-md-5">
+                <h4>Selected species</h4>
+                <label for="specieslist">Add species (maximum 50)</label>
+            <select multiple class="form-control selectablein" id="specieslist" name="specieslist" size="40" style="width:100%;overflow:auto;">
+            </select>
+            </div>
+        </div>
+        <div class="alert alert-danger hidden" id="seqlimit"><strong>Too many species selected.</strong> Only the first 50 selected species will be used.</div>
+        <hr>
+        <h4>Overview</h4>
+        <p>Show/hide additional information:<br />
+        <a href="#" class="toggle-vis" data-column="1">Strain </a> - <a href="#" class="toggle-vis" data-column="2">Organism ID</a> - <a href="#" class="toggle-vis" data-column="4">Furthest organism</a> - <a href="#" class="toggle-vis" data-column="5">Maximum distance</a>
+            - <a href="#" class="toggle-vis" data-column="6">Minimum distance</a> - <a href="#" class="toggle-vis" data-column="7">Genus</a>
+             - <a href="#" class="toggle-vis" data-column="9">Family</a> - <a href="#" class="toggle-vis" data-column="11">Order</a>
+             - <a href="#" class="toggle-vis" data-column="13">Phylum</a>
+        </p>
+        <table class="table table-bordered table-hover" cellspacing="0" id="refinfo" width="100%">
+           <thead>
+           <tr>
+               <th>Organism name</th>
+               <th>Strain</th>
+               <th>Organism ID</th>
+               <th>Mean distance from queries</th>
+               <th>Furthest organism</th>
+               <th>Maximum distance</th>
+               <th>Minimum distance</th>
+               <th>Genus</th>
+               <th>Genus ID</th>
+               <th>Family</th>
+               <th>Family ID</th>
+               <th>Order</th>
+               <th>Order ID</th>
+               <th>Phylum</th>
+               <th>Phylum ID</th>
+           </tr>
+           </thead>
+        </table>
+
+        <h3 class="page-header">Outgroups</h3>
+        <p>Outgroups are automatically screened after ingroup selection. Please review outgroup choices before continuing.</p>
+        <div class="row">
+            <div class="col-md-2">
+                <h4>Common group</h4>
+            </div>
+            <div class="col-md-10">
+                <p style="margin-top:10px" id="commgroup"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-5">
+            <h4>Outgroups</h4>
+            <label for="outgrsel">Select outgroup</label>
+            <select multiple class="form-control" id="outgrsel" size="7" style="width:100%">
+                <!--<option>purrrrrr</option>
+                <option>man running from cops stops to pet cats, goes to jail.</option>
+                <option>stare at guinea pigs</option>
+                <option>hiss at cats </option>
+                <option>claw at curtains</option>
+                <option>refuse to leave cardboard box</option> -->
+            </select>
+                <input class="form-control" id="outgroupsearch" style="margin-top:10px" type="text" placeholder="Search outgroup" aria-label="Search outgroups">
+        </div>
+            <div class="col-md-2" style="padding-top:65px">
+                <button type="button" class="btn btn-default" style="width:100%" onclick="addtolist('#outgrsel','#outgrlist'); refreshView('#outgrlist',5,'#outgrlimit')">Add to list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px;" onclick="removeAllFromList('#outgrlist'); refreshView('#outgrlist',5,'#outgrlimit')">Remove from list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="addtolist('#outgrlist','#outgrlist'); refreshView('#outgrlist',5,'#outgrlimit')">Move to top</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="resetSels('#outgrsel','#outgrlist',1); refreshView('#outgrlist',5,'#outgrlimit')">Reset to default</button>
+            </div>
+            <div class="form-group col-md-5">
+                <h4>Selected outgroups</h4>
+                <label for="outgrlist">Add outgroup (maximum 5)</label>
+            <select multiple class="form-control selectablein2" id="outgrlist" name="outgrlist" size="7" style="width:100%">
+            </select>
+            </div>
+        </div>
+        <div class="hidden" id="nooutgroups">
+            <div class="alert alert-warning">No outgroups found with current selection of species. <span style="text-decoration-line:underline;cursor:pointer" onclick="outgroupLoad();"> Load more outgroups?</span></div>
+
+        </div>
+        <div class="alert alert-danger selectablewarn hidden"><strong>Error:</strong> Not enough species or outgroups selected. Please select at least five species and one outgroup to submit.</div>
+        <div class="alert alert-danger hidden" id="outgrlimit"><strong>Too many outgroups selected.</strong> Only the first 5 selected outgroups will be used.</div>
+        <button type="button" class="btn btn-primary" style="width:300px; margin-top:10px;" onclick="selectAndSend('#species')">Continue &raquo;</button>
+        <input type="hidden" id="jobinfo" name="jobinfo" value="{{ jobid }}">
+    </form>
+</div>
+<!-- how big should speciessel be? -->
+                <!-- what is it doing to the page scroll thing?
+                <option>stare at the wall</option>
+                <option>play with food </option>
+                <option>get confused by dust</option>
+                <option>Hunt by meowing loudly at 5am</option>
+                <option>Purr as loud as possible</option>
+                <option>knock everything off the table</option>
+                <option>You call this cat food</option> -->
+
+<script src="/static/js/orgtables.js"></script> <!-- why does toggle-vis only work with the script at the end of the page? -->
+<script src="/static/js/step2.js"></script>
+<script>
+        $('body').onload = getOrgs();
+</script>
+{% endblock %}

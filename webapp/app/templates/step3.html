@@ -1,0 +1,107 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<div class="container" style="padding-top:40px;">
+    <h2>{{ jobname }}</h2> <!-- can be prettier probably -->
+    <span class="sr-only">Workflow progress: The previous steps were </span><a href="/analyze" class="steps">Step 1 &raquo;</a> <a href="{{ url_for('showstep',jobid=jobid,step='step2') }}" class="steps">Step 2 &raquo;</a> <span class="sr-only">The current step is </span><a href="#" class="steps">Step 3 <small>MLST gene selection</small> &raquo;</a> <span class="sr-only">The next step is </span> <span class="steps-disabled">Results</span>
+    <hr>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alike">Job ID</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px">{{ jobid }}</p> <!-- tweak margin? -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="h4alke">Status</h3>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px"><b>MLST gene selection (Step 3)</b></p>
+        </div>
+    </div>
+    <hr>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" style="width:66%"></div>
+    </div>
+    <h3 class="page-header">Genes</h3>
+    <form action="genein" method="post" enctype="multipart/form-data" name="mlstgenes" id="mlstgenes">
+        <div class="row">
+        <div class="form-group col-md-5">
+            <h4>Genes found</h4>
+            <label for="mlstsel">Select MLST genes</label>
+            <select multiple class="form-control" id="mlstsel" size="15" style="width:100%;overflow:auto;"> <
+                <!-- <option>stare at the wall</option>
+                <option>play with food </option>
+                <option>get confused by dust</option>
+                <option>Hunt by meowing loudly at 5am</option>
+                <option>Purr as loud as possible</option>
+                <option>knock everything off the table</option>
+                <option>push your water glass on the floor</option>
+                <option>Meowing non stop for food</option>
+                <option>stares at human while pushing stuff off a table</option>
+                <option>flee in terror at cucumber discovered on floor</option>
+                <option>repeatedly scratch at fence</option> -->
+            </select>
+        </div>
+            <div class="col-md-2" style="padding-top:65px">
+                <button type="button" class="btn btn-default" style="width:100%" onclick="addtolist('#mlstsel','#mlstlist'); refreshView('#mlstlist',100,'#mlstlimit');idSearch();findDeleted();">Add to list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px;" onclick="removeAllFromList('#mlstlist'); refreshView('#mlstlist',100,'#mlstlimit');idSearch();findDeleted();">Remove from list</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="addtolist('#mlstlist','#mlstlist'); refreshView('#mlstlist',100,'#mlstlimit');idSearch();findDeleted();">Move to top</button>
+                <button type="button" class="btn btn-default" style="width:100%;margin-top:2px" onclick="resetSels('#mlstsel','#mlstlist',100); refreshView('#mlstlist',100,'#mlstlimit');idSearch();findDeleted();">Reset to default</button>
+            </div>
+            <div class="form-group col-md-5">
+                <h4>Selected genes</h4>
+                <label for="mlstlist">Add genes (maximum 100)</label>
+            <select multiple class="form-control selectablein" id="mlstlist" name="mlstlist" size="15" style="width:100%;overflow:auto;">
+            </select>
+            </div>
+        </div>
+        <div class="hidden" id="deletewarning">
+            <div class="alert alert-warning">
+                <p><b>Note:</b> some organisms have to be removed to use the current set of genes. The organisms that have to be removed are:</p>
+                <ul id="todelete">
+
+                </ul>
+            </div>
+            <!-- <div class="checkbox">
+                <label><input type="checkbox" id="removeorgs" name="removeorgs" value="checked">Remove suggested organisms and proceed with current set</label>
+            </div> -->
+        </div>
+        <div class="alert alert-danger selectablewarn hidden"><strong>Error:</strong> Not enough genes selected. Please select at least ten genes before submitting.</div>
+        <div class="alert alert-danger hidden" id="mlstlimit"><strong>Too many genes selected.</strong> Only the first 100 selected genes will be used.</div>
+        <hr>
+        <h4>Overview</h4>
+        <table class="table table-bordered table-hover" cellspacing="0" id="geneinfo" width="100%">
+           <thead>
+           <tr>
+                <th>Name</th>
+               <th>Accession number</th>
+               <th>Function</th>
+               <th>Description</th>
+           </tr>
+           </thead>
+        </table>
+        <h4>General</h4>
+    <div class="form-group row"> <!-- fix formating -->
+        <label class="col-md-2" for="treeoptions">Options</label>
+        <div class="col-md-10" id="treeoptions">
+            <div class="radio">
+                <label><input type="radio" name="optradio" value="concatenated" checked="checked">Concatenated alignment</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="optradio" value="coalescent">Coalescent tree</label>
+            </div>
+        </div>
+    </div>
+        <button type="button" class="btn btn-primary" style="width:300px;" onclick="selectAndSend('#mlstgenes')">Continue &raquo;</button>
+        <input type="hidden" id="jobinfo" name="jobinfo" value="{{ jobid }}">
+    </form>
+</div>
+<script src="/static/js/step3.js"></script>
+<script src="/static/js/genetables.js"></script>
+<script>
+    $('body').onload = getGenes();
+</script>
+
+{% endblock %}

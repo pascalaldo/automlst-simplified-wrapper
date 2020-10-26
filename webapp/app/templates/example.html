@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+{% block mainbody %}
+<div class="container" style="padding-top:40px">
+<h2>Job ID: Example</h2>
+<h3 class="page-header" style="margin-top:0px">Results</h3>
+    <div class="row">
+        <div class="col-md-2">
+            <h4>Report:</h4>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px">Example</p>
+        </div>
+    </div>
+     <div class="row">
+        <div class="col-md-2">
+            <h4>Status</h4>
+        </div>
+        <div class="col-md-10">
+            <p style="margin-top:10px"><b>Finished</b></p>
+        </div>
+    </div>
+    <hr>
+    <!-- Add tree here
+    <div class="thumbnail">
+    <img src="https://evolution.berkeley.edu/evolibrary/images/news/tree-Daveybot-Flickr-CCBYNCSA.jpg" >
+        <div class="caption text-center">This is the wrong kind of tree altogether but it's just a placeholder for layout purposes anyway.</div>
+    </div> -->
+
+
+    <button type="button" class="btn btn-primary" style="width:200px" id="treedownl" name="treedownl"><span class="glyphicon glyphicon-download-alt"></span> Download tree</button>
+    <button type="button" class="btn btn-primary" style="width:200px" id="aligndownl" name="aligndownl"><span class="glyphicon glyphicon-download-alt"></span> Download alignment</button>
+    <button type="button" class="btn btn-primary" style="width:200px" id="mlstdownl" name="mlstdownl"><span class="glyphicon glyphicon-download-alt"></span> Download MLST list</button>
+    <button type="button" class="btn btn-primary" style="width:200px" id="orgdownl" name="orgdownl"><span class="glyphicon glyphicon-download-alt"></span> Download organism list</button>
+    <!-- button layout? -->
+    <hr>
+    <button type="button" class="btn btn-primary" style="width:300px" id="resubmit" name="resubmit"><span class="glyphicon glyphicon-repeat"></span> Reanalyze from Step 2</button>
+    <div class="alert alert-warning" style="margin-top:10px"><strong>Warning:</strong> Reanalyzing will clear your current results.</div>
+</div>
+{% endblock %}
