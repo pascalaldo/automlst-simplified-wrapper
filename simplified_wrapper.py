@@ -22,11 +22,19 @@ def run_minimlst(indir, cpu):
     # create SQL database from genbank files
     log.info("1. Creating SQL database from genbank files...")
     out_db = os.path.join(indir, "genbank_to_sql")
-    gbk2sqldb.runall(indir, out_db, mcpu=cpu)
+    if os.path.isfile(out_db):
+        log.debug(" - Previous SQL database exist, skipping step.")
+        pass
+    else:
+        gbk2sqldb.runall(indir, out_db, mcpu=cpu)
     # extract genes from database
     log.info("2. Extracting genes from database...")
     singles_dir = os.path.join(indir, "singles")
-    getmlstgenes.findsingles(out_db, outdir=singles_dir)
+    if os.path.isdir(singles_dir):
+        log.debug(" - Previous singles directory exist, skipping step.")
+        pass
+    else:
+        getmlstgenes.findsingles(out_db, outdir=singles_dir)
     # align and trim - currently hardcoded to amino acid seqs
     log.info("3. Aligning and trimming...")
     singles_found = [single for single in os.listdir(singles_dir)
@@ -61,9 +69,8 @@ def run_minimlst(indir, cpu):
                         " ")  # split on space
     # build tree
     log.info("5. Building tree...")
-    iq_tree_cmd = "iqtree -s {} -q {} -bb 1000 -nt {}".format(os.path.join(indir, "supermatrix.fa"),
-                                                       os.path.join(indir, "raxmlpart.txt"),
-                                                       cpu)
+    iq_tree_cmd = "iqtree -s {} -q {} -bb 1000 -nt AUTO".format(os.path.join(indir, "supermatrix.fa"),
+                                                       os.path.join(indir, "raxmlpart.txt"))
     iq_tree_cmd = iq_tree_cmd.split()
     subprocess.call(iq_tree_cmd)
     log.info("Done!")
