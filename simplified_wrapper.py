@@ -30,11 +30,7 @@ def run_minimlst(indir, cpu):
     # extract genes from database
     log.info("2. Extracting genes from database...")
     singles_dir = os.path.join(indir, "singles")
-    if os.path.isdir(singles_dir):
-        log.debug(" - Previous singles directory exist, skipping step.")
-        pass
-    else:
-        getmlstgenes.findsingles(out_db, outdir=singles_dir)
+    getmlstgenes.findsingles(out_db, outdir=singles_dir)
     # align and trim - currently hardcoded to amino acid seqs
     log.info("3. Aligning and trimming...")
     singles_found = [single for single in os.listdir(singles_dir)
