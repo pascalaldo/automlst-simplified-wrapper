@@ -30,7 +30,13 @@ def writefasta(db,outfile,nuc=False,idprfx="",latest=False):
     log.info("Writing sequences to disk...")
     with open(outfile,"w") as ofil:
         for r in result:
-            ofil.write(">%s|%s%s %s|source|%s|loc|%s %s %s\n%s\n" % (r[1], idprfx, r[0],r[2],r[4],r[5],r[6],r[7],r[-1-int(nuc)]))
+            sequence = r[-1-int(nuc)]
+            if len(sequence) == 0:
+                log.warning("Empty sequence for %s. Skip writing record:" % r[0])
+                log.warning((">%s|%s%s %s|source|%s|loc|%s %s %s" % (r[1], idprfx, r[0],r[2],r[4],r[5],r[6],r[7])))
+                pass
+            else:
+                ofil.write(">%s|%s%s %s|source|%s|loc|%s %s %s\n%s\n" % (r[1], idprfx, r[0],r[2],r[4],r[5],r[6],r[7],r[-1-int(nuc)]))
     cur.close()
 
 # Commandline Execution
