@@ -120,12 +120,7 @@ def convertgenes(filename, outdir="./", genes=False,f="",rename=False,usetrans=F
                             feature_count += 1
                 log.info("Record #%s CDS bp coverage: %s%%"%(recnum,(bpcount * 100 / bpend)))
                 validchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-"
-                if "organism" in seq_record.annotations:
-                    orgname= "".join([c for c in seq_record.annotations["organism"].replace(" ","_") if c in validchars])
-                # elif "source" in seq_record.annotations:
-                #     orgname= "".join([c for c in seq_record.annotations["source"].replace(" ","_") if c in validchars])
-                else:
-                    orgname=""
+                orgname = fname.replace(".", "")
         if rename and len(orgname)>0:
             os.rename(basename + ".genelist", os.path.join(outdir, prfix + orgname + ".genelist"))
             os.rename(basename + ".faa", os.path.join(outdir, prfix + orgname + ".faa"))
