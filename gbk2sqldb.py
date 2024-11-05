@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import argparse, tempfile, subprocess, glob, os, setlog
+import argparse, subprocess, glob, os, setlog
 import gbk2fa, makeseqsql, seqsql2fa, makehmmsql #fasta2genes
 from werkzeug.utils import secure_filename
 from Bio import Entrez
+from backports import tempfile
 
 global log
 log=setlog.init(toconsole=True)
@@ -41,38 +42,38 @@ def hmmsearch(outname,hmmdb,infile,mcpu=1,cut="tc"):
     #subprocess.call(cmd)
 
 def runall(indir,outdb,mcpu=1,remotelist=None,rnamodels=None,aamodels=None):
-    tempfolder = tempfile.mkdtemp(prefix="autoMLST_")
-    convfolder = os.path.join(tempfolder,"converted")
-    if remotelist and os.path.isfile(remotelist):
-        log.info("Downloading remote list of accessions...")
-        with open(remotelist,"r") as fil:
-            for line in fil:
-                if getNCBIgbk(line.strip(),indir):
-                    log.info("Downloaded %s"%line.strip())
-                else:
-                    log.error("Failed to download %s"%line.strip())
-    gbk2fa.runall(os.path.realpath(indir),convfolder,True,mcpu,"rRNA",True)
-
-    refdb = os.path.realpath(outdb)
-    aaseqs = os.path.join(tempfolder,"allseqs.faa")
-    naseqs = os.path.join(tempfolder,"allseqs.fna")
-    makeseqsql.runlist(glob.glob(os.path.join(convfolder,"*.fna")),refdb,True)
-    seqsql2fa.writefasta(refdb,aaseqs,latest=True)
-    seqsql2fa.writefasta(refdb,naseqs,nuc=True,latest=True)
-
-    #Run Hmm searches on seqs
-    if not rnamodels:
-        rnamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"barnap_bact_rRna.hmm")
-    if not aamodels:
-#        aamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"allTFequivPFcore.hmm")
-        aamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"reducedcore.hmm")
-
-    aaresult = os.path.join(tempfolder,"aaresult.domhr")
-    rnaresult = os.path.join(tempfolder,"rnaresult.domhr")
-    hmmsearch(aaresult,aamodels,aaseqs,mcpu=mcpu)
-    hmmsearch(rnaresult,rnamodels,naseqs,mcpu=mcpu)
-    makehmmsql.run(aaresult,refdb)
-    makehmmsql.run(rnaresult,refdb,rna=True)
+    with tempfile.TemporaryDirectory() as tempfolder:
+        convfolder = os.path.join(tempfolder,"converted")
+        if remotelist and os.path.isfile(remotelist):
+            log.info("Downloading remote list of accessions...")
+            with open(remotelist,"r") as fil:
+                for line in fil:
+                    if getNCBIgbk(line.strip(),indir):
+                        log.info("Downloaded %s"%line.strip())
+                    else:
+                        log.error("Failed to download %s"%line.strip())
+        gbk2fa.runall(os.path.realpath(indir),convfolder,True,mcpu,"rRNA",True)
+    
+        refdb = os.path.realpath(outdb)
+        aaseqs = os.path.join(tempfolder,"allseqs.faa")
+        naseqs = os.path.join(tempfolder,"allseqs.fna")
+        makeseqsql.runlist(glob.glob(os.path.join(convfolder,"*.fna")),refdb,True)
+        seqsql2fa.writefasta(refdb,aaseqs,latest=True)
+        seqsql2fa.writefasta(refdb,naseqs,nuc=True,latest=True)
+    
+        #Run Hmm searches on seqs
+        if not rnamodels:
+            rnamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"barnap_bact_rRna.hmm")
+        if not aamodels:
+            #aamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"allTFequivPFcore.hmm")
+            aamodels = os.path.join(os.path.dirname(os.path.realpath(__file__)),"reducedcore.hmm")
+    
+        aaresult = os.path.join(tempfolder,"aaresult.domhr")
+        rnaresult = os.path.join(tempfolder,"rnaresult.domhr")
+        hmmsearch(aaresult,aamodels,aaseqs,mcpu=mcpu)
+        hmmsearch(rnaresult,rnamodels,naseqs,mcpu=mcpu)
+        makehmmsql.run(aaresult,refdb)
+        makehmmsql.run(rnaresult,refdb,rna=True)
 
 # Commandline Execution
 if __name__ == '__main__':
